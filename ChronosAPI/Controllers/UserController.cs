@@ -71,7 +71,7 @@ namespace ChronosAPI.Controllers
             {
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
+                { 
                     myCommand.Parameters.AddWithValue("@FirstName",user.FirstName);
                     myCommand.Parameters.AddWithValue("@LastName", user.LastName);
                     myCommand.Parameters.AddWithValue("@Email", user.Email);

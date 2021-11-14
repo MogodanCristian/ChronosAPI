@@ -968,25 +968,20 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Andronache\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
+    "C:\\Users\\mogod\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Andronache\\Desktop\\_George\\Chronos\\ChronosAPI\\ChronosAPI.csproj",
+      "projectUniqueName": "D:\\Chronos\\ChronosAPI\\ChronosAPI.csproj",
       "projectName": "ChronosAPI",
-      "projectPath": "C:\\Users\\Andronache\\Desktop\\_George\\Chronos\\ChronosAPI\\ChronosAPI.csproj",
-      "packagesPath": "C:\\Users\\Andronache\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Andronache\\Desktop\\_George\\Chronos\\ChronosAPI\\obj\\",
+      "projectPath": "D:\\Chronos\\ChronosAPI\\ChronosAPI.csproj",
+      "packagesPath": "C:\\Users\\mogod\\.nuget\\packages\\",
+      "outputPath": "D:\\Chronos\\ChronosAPI\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Andronache\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\mogod\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"

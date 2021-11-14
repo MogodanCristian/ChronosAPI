@@ -143,7 +143,7 @@ namespace ChronosAPI.Controllers
         {
             JsonResult result = new JsonResult("");
 
-            string query = @" DELETE from dbo.Plan_Dispatcher where UserID=@UserID";
+            string query = @" DELETE from dbo.Plan_Dispatcher where UserID=@UserID and PlanID=@PlanID";
             DataTable table = new DataTable();
             string sqlDataSource = _appSettings.ChronosDBCon;
             SqlDataReader myReader;
@@ -164,7 +164,7 @@ namespace ChronosAPI.Controllers
                     SqlCommand getAllPlanDispatchers = new SqlCommand(selectQueryPlanDispatchers, myCon);
                     planDispatcherReader = getAllPlanDispatchers.ExecuteReader();
                     PlanDispatcherTable.Load(planDispatcherReader);
-                    bool planDispatcherExists = PlanDispatcherTable.AsEnumerable().Any(row => planDispatcher.UserId == row.Field<int>("UserID"));
+                    bool planDispatcherExists = PlanDispatcherTable.AsEnumerable().Any(row => planDispatcher.UserId == row.Field<int>("UserID") && planDispatcher.PlanId == row.Field<int>("PlanID"));
                     myCon.Close();
                     if (!planDispatcherExists)
                     {
@@ -177,6 +177,7 @@ namespace ChronosAPI.Controllers
                     using (SqlCommand myCommand = new SqlCommand(query, myCon))
                     {
                         myCommand.Parameters.AddWithValue("@UserID", planDispatcher.UserId);
+                        myCommand.Parameters.AddWithValue("@PlanID", planDispatcher.PlanId);
                         myReader = myCommand.ExecuteReader();
                         table.Load(myReader);
                         myReader.Close();

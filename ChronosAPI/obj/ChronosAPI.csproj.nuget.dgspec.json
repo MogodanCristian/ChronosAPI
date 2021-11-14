@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Chronos\\ChronosAPI\\ChronosAPI.csproj": {}
+    "D:\\Cursuri ATM\\Chronos\\Chronos\\ChronosAPI\\ChronosAPI.csproj": {}
   },
   "projects": {
-    "D:\\Chronos\\ChronosAPI\\ChronosAPI.csproj": {
+    "D:\\Cursuri ATM\\Chronos\\Chronos\\ChronosAPI\\ChronosAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Chronos\\ChronosAPI\\ChronosAPI.csproj",
+        "projectUniqueName": "D:\\Cursuri ATM\\Chronos\\Chronos\\ChronosAPI\\ChronosAPI.csproj",
         "projectName": "ChronosAPI",
-        "projectPath": "D:\\Chronos\\ChronosAPI\\ChronosAPI.csproj",
-        "packagesPath": "C:\\Users\\mogod\\.nuget\\packages\\",
-        "outputPath": "D:\\Chronos\\ChronosAPI\\obj\\",
+        "projectPath": "D:\\Cursuri ATM\\Chronos\\Chronos\\ChronosAPI\\ChronosAPI.csproj",
+        "packagesPath": "C:\\Users\\cabau\\.nuget\\packages\\",
+        "outputPath": "D:\\Cursuri ATM\\Chronos\\Chronos\\ChronosAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\mogod\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\cabau\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -67,7 +67,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

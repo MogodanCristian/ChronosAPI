@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Andronache\\Desktop\\_George\\Chronos\\ChronosAPI\\ChronosAPI.csproj": {}
+    "C:\\Users\\Andronache\\Desktop\\_George\\ChronosAPI\\ChronosAPI\\ChronosAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Andronache\\Desktop\\_George\\Chronos\\ChronosAPI\\ChronosAPI.csproj": {
+    "C:\\Users\\Andronache\\Desktop\\_George\\ChronosAPI\\ChronosAPI\\ChronosAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Andronache\\Desktop\\_George\\Chronos\\ChronosAPI\\ChronosAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Andronache\\Desktop\\_George\\ChronosAPI\\ChronosAPI\\ChronosAPI.csproj",
         "projectName": "ChronosAPI",
-        "projectPath": "C:\\Users\\Andronache\\Desktop\\_George\\Chronos\\ChronosAPI\\ChronosAPI.csproj",
+        "projectPath": "C:\\Users\\Andronache\\Desktop\\_George\\ChronosAPI\\ChronosAPI\\ChronosAPI.csproj",
         "packagesPath": "C:\\Users\\Andronache\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Andronache\\Desktop\\_George\\Chronos\\ChronosAPI\\obj\\",
+        "outputPath": "C:\\Users\\Andronache\\Desktop\\_George\\ChronosAPI\\ChronosAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"

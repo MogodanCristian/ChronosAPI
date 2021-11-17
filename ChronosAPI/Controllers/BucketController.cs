@@ -56,6 +56,78 @@ namespace ChronosAPI.Controllers
             return result;
         }
 
+        [HttpPost("{PlanId:int}")]
+        public JsonResult PostBucketAtPlan([FromRoute()]int PlanId, [FromBody()] object Title)
+        {
+
+            JsonResult result = new JsonResult("");
+            string titleFinal = Title.ToString().Trim().Split(":")[1].Split("\"")[1].Trim('"');
+
+
+
+            string addToBucketProcedure = "dbo.AddBucketToPlan";
+            string sqlDataSource = _appSettings.ChronosDBCon;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(addToBucketProcedure, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("@Title", titleFinal);
+                    myCommand.Parameters.AddWithValue("@PlanId", PlanId);
+                    int rowsAffected = myCommand.ExecuteNonQuery();
+                    if (rowsAffected == 0)
+                    {
+                        result.StatusCode = 400;
+                        result.Value = "Failed to Create Bucket And assign to Plan. It's on us...";
+                        myCon.Close();
+                        return result;
+                    }
+                    myCon.Close();
+                }
+            }
+            result.StatusCode = 200;
+            result.Value = titleFinal;
+            return result;
+        }
+
+        [HttpGet("{PlanId:int}")]
+        public JsonResult GetBucketsForPlan([FromRoute()]int PlanId)
+        {
+            JsonResult result = new JsonResult("");
+            string query = @"SELECT B.BucketID, B.Title
+                             FROM Buckets AS B
+                             JOIN Bucket_Dispatcher as BD
+                             ON B.BucketID = BD.BucketID
+                             JOIN Plans AS P
+                             ON BD.PlanID = P.PlanID
+                             WHERE P.PlanID = @PlanId";
+            DataTable table = new DataTable();
+            string sqlSource = _appSettings.ChronosDBCon;
+            SqlDataReader reader;
+            using (SqlConnection my_connection = new SqlConnection(sqlSource))
+            {
+                my_connection.Open();
+                using (SqlCommand my_command = new SqlCommand(query, my_connection))
+                {
+                    my_command.Parameters.AddWithValue("@PlanId", PlanId);
+                    reader = my_command.ExecuteReader();
+                    table.Load(reader);
+                    reader.Close();
+                    my_connection.Close();
+                }
+            }
+            if (table.Rows.Count == 0)
+            {
+                result.StatusCode = 404;
+                result.Value = "No buckets found for this plan";
+                return result;
+            }
+            result.StatusCode = 200;
+            result.Value = table;
+            return result;
+        }
+
 
         [HttpPost]
         public JsonResult PostBucket(Bucket bucket)

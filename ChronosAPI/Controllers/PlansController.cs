@@ -56,6 +56,75 @@ namespace ChronosAPI.Controllers
             return result;
         }
 
+        [HttpGet("{UserId:int}")]
+        public JsonResult GetPlansForUser(int UserId)
+        {
+            JsonResult result = new JsonResult("");
+            string query = @"SELECT Pl.PlanID, Pl.Title, Pl.Description, Pl.CreatedAt
+                            FROM Plan_Dispatcher as PD
+                            JOIN Users AS U
+                            ON PD.UserID = U.UserID
+                            JOIN Plans AS Pl
+                            ON PD.PlanID = Pl.PlanID
+                            WHERE U.UserID = @UserId";
+            DataTable table = new DataTable();
+            string sqlSource = _appSettings.ChronosDBCon;
+            SqlDataReader reader;
+            using (SqlConnection my_connection = new SqlConnection(sqlSource))
+            {
+                my_connection.Open();
+                using (SqlCommand my_command = new SqlCommand(query, my_connection))
+                {
+                    my_command.Parameters.AddWithValue("@UserId", UserId);
+                    reader = my_command.ExecuteReader();
+                    table.Load(reader);
+                    reader.Close();
+                    my_connection.Close();
+                }
+            }
+            if (table.Rows.Count == 0)
+            {
+                result.StatusCode = 404;
+                result.Value = "No plans found for this user";
+                return result;
+            }
+            result.StatusCode = 200;
+            result.Value = table;
+            return result;
+        }
+
+
+        [HttpPost("{UserId:int}")]
+        public JsonResult CreatePlanForUser([FromRoute()]int UserId, [FromBody()] Plan plan)
+        {
+            JsonResult result = new JsonResult("");
+            string addToBucketProcedure = "dbo.AddPlanToUser";
+            string sqlDataSource = _appSettings.ChronosDBCon;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(addToBucketProcedure, myCon))
+                {
+                    myCommand.CommandType = CommandType.StoredProcedure;
+                    myCommand.Parameters.AddWithValue("@Title", plan.Title);
+                    myCommand.Parameters.AddWithValue("@Description", plan.Description);
+                    myCommand.Parameters.AddWithValue("@UserId", UserId);
+                    int rowsAffected = myCommand.ExecuteNonQuery();
+                    if (rowsAffected == 0)
+                    {
+                        result.StatusCode = 400;
+                        result.Value = "Failed to Create Plan And assign to User. It's on us...";
+                        myCon.Close();
+                        return result;
+                    }
+                    myCon.Close();
+                }
+            }
+            result.StatusCode = 200;
+            result.Value = plan;
+            return result;
+        }
+
         public JsonResult PostPlan(Plan plan)
         {
             JsonResult result = new JsonResult("");

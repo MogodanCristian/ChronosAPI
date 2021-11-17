@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gGS8hMg1HzRyCwFAgYYFvQ9CZv6+JwB1nlj0CzAYzGsmXtzjt/lCL9PsGrF9ky4bzZS1gOuBz7HfuXSPSgEHAw==",
+  "dgSpecHash": "yjZqYrR3sQyIFFj4B8wo2b9Hm31v5+wbftA6rsk10oxZmxjj/uGVRWGdFGi2KIF2fChWrYaRZroEBUufaLpq7A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Andronache\\Desktop\\_George\\Chronos\\ChronosAPI\\ChronosAPI.csproj",
+  "projectFilePath": "C:\\Users\\Andronache\\Desktop\\_George\\ChronosAPI\\ChronosAPI\\ChronosAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Andronache\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512",
     "C:\\Users\\Andronache\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.6\\microsoft.aspnetcore.authentication.jwtbearer.3.1.6.nupkg.sha512",

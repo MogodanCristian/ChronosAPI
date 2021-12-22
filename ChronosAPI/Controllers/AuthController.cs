@@ -24,6 +24,30 @@ namespace ChronosAPI.Controllers
             _userService = userService;
         }
 
+        [Route("api/auth/login/jwt")]
+        [HttpPost]
+        public IActionResult JwtLogin(AuthenticateJwtRequest authJwtReq)
+        {
+            try
+            {
+
+                var response = _userService.AuthenticateJwt(authJwtReq.jwt);
+                if (response == null)
+                {
+                    return BadRequest(new { message = "Login failed... It's on us." });
+                }
+                return Ok(response);
+            }
+            catch(CredentialsEmptyException)
+            {
+                return BadRequest(new { message = "Credentials Empty. No Jwt token found in request body." });
+            }
+            catch (UserBadJwtException)
+            {
+                return BadRequest(new { message = "Invalid JWT. Login again." });
+            }
+        }
+
         [Route("api/auth/login")]
         [HttpPost]
         public IActionResult Login(AuthenticateRequest req)

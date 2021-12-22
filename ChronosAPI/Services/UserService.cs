@@ -23,6 +23,8 @@ namespace ChronosAPI.Services
         AuthenticateResponse Authenticate(AuthenticateRequest model);
         RegisterResponse Register(User user);
         User GetUserById(int id);
+
+        AuthenticateResponse AuthenticateJwt(string jwtToken);
     }
     public class UserService : IUserService
     {
@@ -215,6 +217,39 @@ namespace ChronosAPI.Services
 
             return user;           
         
+        }
+
+        public AuthenticateResponse AuthenticateJwt(string jwtTokenParam)
+        {
+            if (string.IsNullOrEmpty(jwtTokenParam))
+            {
+                throw new CredentialsEmptyException();
+            }
+            // get USER ID BY JWT.!!!!!!!!!
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                tokenHandler.ValidateToken(jwtTokenParam, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+
+                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                int userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+                User user = GetUserById(userId);
+                return new AuthenticateResponse(user, jwtTokenParam);
+            }
+            catch
+            {
+                throw new UserBadJwtException();
+            }
         }
     }
 }

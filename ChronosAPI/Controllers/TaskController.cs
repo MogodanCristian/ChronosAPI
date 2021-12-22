@@ -55,21 +55,59 @@ namespace ChronosAPI.Controllers
             return result;
         }
 
-        [HttpPost]
-        public JsonResult PostTask(TaskModel task)
+        [HttpGet("{PlanId:int}")]
+        public JsonResult GetPlansForUser(int PlanId)
         {
             JsonResult result = new JsonResult("");
+            string query = @"SELECT  T.TaskID, T.Title, T.Description, T.CreatedAt, T.StartDate, T.EndDate, T.Progress, T.Priority, T.FinishedBy,  B.BucketID, P.PlanID
+                             FROM Tasks AS T
+                             JOIN Task_Dispatcher AS TD
+                             ON T.TaskID = TD.TaskID
+                             JOIN Buckets AS B
+                             ON TD.BucketID = B.BucketID
+							 JOIN Bucket_Dispatcher AS BD
+							 ON B.BucketID = BD.BucketID
+							 JOIN Plans AS P
+							 ON BD.PlanID = P.PlanID
+							 WHERE P.PlanID = @PlanId";
+            DataTable table = new DataTable();
+            string sqlSource = _appSettings.ChronosDBCon;
+            SqlDataReader reader;
+            using (SqlConnection my_connection = new SqlConnection(sqlSource))
+            {
+                my_connection.Open();
+                using (SqlCommand my_command = new SqlCommand(query, my_connection))
+                {
+                    my_command.Parameters.AddWithValue("@PlanId", PlanId);
+                    reader = my_command.ExecuteReader();
+                    table.Load(reader);
+                    reader.Close();
+                    my_connection.Close();
+                }
+            }
+            if (table.Rows.Count == 0)
+            {
+                result.StatusCode = 404;
+                result.Value = "No tasks found for this plan";
+                return result;
+            }
+            result.StatusCode = 200;
+            result.Value = table;
+            return result;
+        }
 
-            string query = @"INSERT INTO dbo.Tasks
-           (Title,Description,CreatedAt,StartDate,EndDate,Progress,Priority,FinishedBy)
-     VALUES
-           (@Title,@Description, @CreatedAt,@StartDate,@EndDate,@Progress,@Priority, @FinishedBy)";
+        [HttpPost]
+        public JsonResult CreateTaskToBucket(TaskRequestModel task)
+        {
+            JsonResult result = new JsonResult("");
+            string addToBucketProcedure = "dbo.AddTaskToBucket";
             string sqlDataSource = _appSettings.ChronosDBCon;
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
                 myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                using (SqlCommand myCommand = new SqlCommand(addToBucketProcedure, myCon))
                 {
+                    myCommand.CommandType = CommandType.StoredProcedure;
                     myCommand.Parameters.AddWithValue("@Title", task.Title);
                     myCommand.Parameters.AddWithValue("@Description", ((object)task.Description) ?? DBNull.Value);
                     myCommand.Parameters.AddWithValue("@CreatedAt", ((object)task.CreatedAt) ?? DateTime.Now);
@@ -77,13 +115,13 @@ namespace ChronosAPI.Controllers
                     myCommand.Parameters.AddWithValue("@EndDate", ((object)task.EndDate) ?? DBNull.Value);
                     myCommand.Parameters.AddWithValue("@Progress", task.Progress);
                     myCommand.Parameters.AddWithValue("@Priority", task.Priority);
-                    myCommand.Parameters.AddWithValue("@FinishedBy", ((object)task.FinishedBy) ?? DBNull.Value);
-
+                    myCommand.Parameters.AddWithValue("@BucketId", task.BucketId);
+                    myCommand.Parameters.AddWithValue("@UserId", task.UserId);
                     int rowsAffected = myCommand.ExecuteNonQuery();
                     if (rowsAffected == 0)
                     {
                         result.StatusCode = 400;
-                        result.Value = "Failed to Create Task. It's on us...";
+                        result.Value = "Failed to Create Task And assign to Bucket. It's on us...";
                         myCon.Close();
                         return result;
                     }
@@ -94,6 +132,7 @@ namespace ChronosAPI.Controllers
             result.Value = task;
             return result;
         }
+
         [HttpPut]
         public JsonResult UpdateTask(TaskModel task)
         {

@@ -24,6 +24,8 @@ namespace ChronosAPI.Services
         RegisterResponse Register(User user);
         User GetUserById(int id);
 
+        List<UserMemberInfo> GetUsers();
+
         AuthenticateResponse AuthenticateJwt(string jwtToken);
     }
     public class UserService : IUserService
@@ -250,6 +252,43 @@ namespace ChronosAPI.Services
             {
                 throw new UserBadJwtException();
             }
+        }
+
+        public List<UserMemberInfo> GetUsers()
+        {
+            string query = @"SELECT UserID
+                            ,FirstName
+                            ,LastName
+                            FROM dbo.Users";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _appSettings.ChronosDBCon;
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            var tableList = table.AsEnumerable();
+            List<UserMemberInfo> listOfUsers = new List<UserMemberInfo>();
+            foreach(var x in tableList)
+            {
+                listOfUsers.Add(new UserMemberInfo
+                {
+                    UserId = x.Field<int>("UserId"),
+                    FirstName = x.Field<string>("FirstName"),
+                    LastName = x.Field<string>("LastName")
+                });
+            }
+
+            return listOfUsers;
         }
     }
 }

@@ -26,7 +26,6 @@ namespace ChronosAPI.Controllers
         }
 
         [HttpGet]
-
         public JsonResult GetPlans()
         {
             JsonResult result = new JsonResult("");
@@ -49,6 +48,43 @@ namespace ChronosAPI.Controllers
             {
                 result.StatusCode = 404;
                 result.Value = "Plans table is empty!";
+                return result;
+            }
+            result.StatusCode = 200;
+            result.Value = table;
+            return result;
+        }
+
+        [HttpGet("PlanInfo/{PlanId:int}")]
+        public JsonResult GetUsersInPlan(int PlanId)
+        {
+            JsonResult result = new JsonResult("");
+            string query = @"SELECT U.UserID, U.FirstName, U.LastName
+                            FROM Users AS U
+                            JOIN Plan_Dispatcher AS PD
+                            ON U.UserID = PD.UserID
+                            JOIN Plans AS P
+                            ON PD.PlanID = P.PlanID
+                            WHERE P.PlanID = @PlanId";
+            DataTable table = new DataTable();
+            string sqlSource = _appSettings.ChronosDBCon;
+            SqlDataReader reader;
+            using (SqlConnection my_connection = new SqlConnection(sqlSource))
+            {
+                my_connection.Open();
+                using (SqlCommand my_command = new SqlCommand(query, my_connection))
+                {
+                    my_command.Parameters.AddWithValue("@PlanId", PlanId);
+                    reader = my_command.ExecuteReader();
+                    table.Load(reader);
+                    reader.Close();
+                    my_connection.Close();
+                }
+            }
+            if (table.Rows.Count == 0)
+            {
+                result.StatusCode = 404;
+                result.Value = "No users found for this plan";
                 return result;
             }
             result.StatusCode = 200;

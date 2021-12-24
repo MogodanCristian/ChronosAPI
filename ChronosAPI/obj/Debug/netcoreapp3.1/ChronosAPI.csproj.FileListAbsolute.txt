@@ -111,7 +111,6 @@ C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\bin\Debug\netcoreapp3.
 C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dll
 C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
-C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\obj\Debug\netcoreapp3.1\ChronosAPI.csproj.AssemblyReference.cache
 C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\obj\Debug\netcoreapp3.1\ChronosAPI.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\obj\Debug\netcoreapp3.1\ChronosAPI.AssemblyInfoInputs.cache
 C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\obj\Debug\netcoreapp3.1\ChronosAPI.AssemblyInfo.cs

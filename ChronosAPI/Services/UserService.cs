@@ -259,6 +259,7 @@ namespace ChronosAPI.Services
             string query = @"SELECT UserID
                             ,FirstName
                             ,LastName
+                            ,Email
                             FROM dbo.Users";
 
             DataTable table = new DataTable();
@@ -284,7 +285,8 @@ namespace ChronosAPI.Services
                 {
                     UserId = x.Field<int>("UserId"),
                     FirstName = x.Field<string>("FirstName"),
-                    LastName = x.Field<string>("LastName")
+                    LastName = x.Field<string>("LastName"),
+                    Email = x.Field<string>("Email")
                 });
             }
 

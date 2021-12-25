@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ChronosAPI.Helpers;
+using ChronosAPI.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -14,24 +17,30 @@ namespace ChronosAPI.Controllers
     [ApiController]
     public class EmailController : ControllerBase
     {
+
+        private readonly AppSettings _appSettings;
+
+        public EmailController(IOptions<AppSettings> appSettings)
+        {
+            _appSettings = appSettings.Value;
+        }
+
         [HttpPost]
-        public IActionResult sendEmailViaWebApi()
+        public IActionResult sendEmailViaWebApi(EmailModel emailModel)
         {
             try
             {
-                string subject = "Email Subject";
-                string body = "Email body";
-                string FromMail = "steelparrot.inc@gmail.com";
-                string emailTo = "georgeandronache.cpp@gmail.com";
+                
+                string emailTo = emailModel.toemail;
                 MailMessage mail = new MailMessage();
                 SmtpClient client = new SmtpClient("smtp.gmail.com");
-                mail.From = new MailAddress(FromMail);
+                mail.From = new MailAddress(_appSettings.dev_team_email);
                 mail.To.Add(emailTo);
-                mail.Subject = subject;
-                mail.Body = body;
+                mail.Subject = emailModel.subject;
+                mail.Body = emailModel.message;
                 client.Port = 587;
                 client.UseDefaultCredentials = false;
-                client.Credentials = new System.Net.NetworkCredential("steelparrot.inc@gmail.com", "papagaluu1$");
+                client.Credentials = new System.Net.NetworkCredential(_appSettings.dev_team_email, _appSettings.dev_team_password);
                 client.EnableSsl = true;
                 client.Send(mail);
                 return Ok("Mail Sent");
@@ -41,12 +50,6 @@ namespace ChronosAPI.Controllers
                 return BadRequest(ex.Message);
             }
            
-        }
-
-        private string createEmailBody(string userName, string message)
-        {
-            string body = message;
-            return body;
         }
     }
 }

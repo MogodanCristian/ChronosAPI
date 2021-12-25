@@ -124,3 +124,4 @@ C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\obj\Debug\netcoreapp3.
 C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\obj\Debug\netcoreapp3.1\ChronosAPI.dll
 C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\obj\Debug\netcoreapp3.1\ChronosAPI.pdb
 C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\obj\Debug\netcoreapp3.1\ChronosAPI.genruntimeconfig.cache
+C:\Users\Andronache\Desktop\_George\ChronosAPI\ChronosAPI\obj\Debug\netcoreapp3.1\ChronosAPI.csproj.AssemblyReference.cache

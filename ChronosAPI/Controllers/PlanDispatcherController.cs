@@ -82,6 +82,15 @@ namespace ChronosAPI.Controllers
             string selectQueryPlans = @"SELECT * from dbo.Plans";
             SqlDataReader planReader;
 
+            DataTable PlanDispatcher = new DataTable();
+            string selectPlanDispatcher = @"SELECT [PlanDispatcherID]
+                                          ,[UserID]
+                                          ,[PlanID]
+                                          ,[AssignedAt]
+                                      FROM [dbo].[Plan_Dispatcher]
+                                      WHERE UserID = @UserID AND PlanID = @PlanID";
+            SqlDataReader planDispatcherReader;
+
             //-----------------------------------------------------------
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
@@ -101,6 +110,20 @@ namespace ChronosAPI.Controllers
                 planReader = getAllPlans.ExecuteReader();
                 Plans.Load(planReader);
                 bool planExists = Plans.AsEnumerable().Any(row => planDispatcher.PlanId == row.Field<int>("PlanID"));
+                myCon.Close();
+
+                myCon.Open();
+                SqlCommand cmd = new SqlCommand(selectPlanDispatcher, myCon);
+                cmd.Parameters.AddWithValue("@UserID", planDispatcher.UserId);
+                cmd.Parameters.AddWithValue("@PlanID", planDispatcher.PlanId);
+                planDispatcherReader = cmd.ExecuteReader();
+                PlanDispatcher.Load(planDispatcherReader);
+                if(PlanDispatcher.Rows.Count > 0)
+                {
+                    result.StatusCode = 400;
+                    result.Value = "User does not exit in Database!!!";
+                    return result;
+                }
                 myCon.Close();
 
                 //----------------------------------------------------

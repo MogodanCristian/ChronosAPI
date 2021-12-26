@@ -26,6 +26,8 @@ namespace ChronosAPI.Services
 
         List<UserMemberInfo> GetUsers();
 
+        JsonResult UpdateUserPassword(ResetPasswordModel resetPasswordModel);
+
         AuthenticateResponse AuthenticateJwt(string jwtToken);
     }
     public class UserService : IUserService
@@ -291,6 +293,64 @@ namespace ChronosAPI.Services
             }
 
             return listOfUsers;
+        }
+
+        public JsonResult UpdateUserPassword(ResetPasswordModel resetPasswordModel)
+        {
+
+            // validate user exists in the DB.
+            JsonResult result = new JsonResult("");
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _appSettings.ChronosDBCon;
+            string queryUserExists = @" SELECT * from dbo.Users WHERE Email = @Email";
+            SqlDataReader userExistsReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(queryUserExists, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@Email", resetPasswordModel.email);
+                    userExistsReader = myCommand.ExecuteReader();
+                    table.Load(userExistsReader);
+                    userExistsReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            if (table.Rows.Count == 0)
+            {
+                result.Value = "User not found!";
+                result.StatusCode = 404;
+                return result;
+            }
+
+            // hash password
+            string oldPassword = resetPasswordModel.newPassword;
+            resetPasswordModel.newPassword = BCrypt.Net.BCrypt.HashPassword(oldPassword);
+
+            string query = @"UPDATE [dbo].[Users] SET Password = @Password WHERE Email = @Email";
+
+            table = new DataTable();
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@Email", resetPasswordModel.email);
+                    myCommand.Parameters.AddWithValue("@Password", resetPasswordModel.newPassword);
+
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            result.Value = "Successfully updated user's password";
+            result.StatusCode = 200;
+            return result;
         }
     }
 }

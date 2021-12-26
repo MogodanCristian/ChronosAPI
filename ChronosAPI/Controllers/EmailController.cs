@@ -44,6 +44,7 @@ namespace ChronosAPI.Controllers
                 client.EnableSsl = true;
                 client.Send(mail);
                 return Ok("Mail Sent");
+               
             }
             catch(Exception ex)
             {

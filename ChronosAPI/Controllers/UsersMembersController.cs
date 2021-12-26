@@ -1,4 +1,5 @@
 ﻿using ChronosAPI.Helpers;
+using ChronosAPI.Models;
 using ChronosAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace ChronosAPI.Controllers
 {
-    [Authorize]
     [ApiController]
     public class UsersMembersController : ControllerBase
     {
@@ -20,6 +20,7 @@ namespace ChronosAPI.Controllers
             _userService = userService;
         }
 
+        [Authorize]
         [Route("api/users/memberinfo")]
         [HttpGet]
         public IActionResult GetUsers()
@@ -40,6 +41,28 @@ namespace ChronosAPI.Controllers
             }
         }
 
+        [Route("api/users/reset-password")]
+        [HttpPost]
+        public IActionResult ResetUserPassword(ResetPasswordModel resetPasswordModel)
+        {
+            try
+            {
+                var response = _userService.UpdateUserPassword(resetPasswordModel);
+                if (response == null)
+                {
+                    return BadRequest(new { message = "User Reset Password Failed... It's on us." });
+                }
+                if(response.StatusCode == 404)
+                {
+                    return BadRequest(new { message = "NO User with this email! Check for typos" });
+                }
 
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }
